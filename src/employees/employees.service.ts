@@ -1,18 +1,20 @@
+import { NotFoundException } from "@nestjs/common";
 import { Injectable } from "@nestjs/common";
 import { CreateEmployeeDto } from "./dto/create-employee.dto";
 import { UpdateEmployeeDto } from "./dto/update-employee.dto";
+import { v4 as uuid } from "uuid";
 
 @Injectable()
 export class EmployeesService {
   private employees: CreateEmployeeDto[] = [
     {
-      id: 1,
+      id: uuid(), 
       name: "Alberto",
       lastName: "Acosta",
       phoneNumber: "4421234567",
     },
     {
-      id: 2,
+      id: uuid(),
       name: "Brandon",
       lastName: "Becerra",
       phoneNumber: "4427654321",
@@ -20,7 +22,7 @@ export class EmployeesService {
   ];
 
   create(createEmployeeDto: CreateEmployeeDto) {
-    createEmployeeDto.id = this.employees.length + 1;
+    createEmployeeDto.id = uuid();
     this.employees.push(createEmployeeDto);
     return this.employees;
   }
@@ -29,18 +31,25 @@ export class EmployeesService {
     return this.employees;
   }
 
-  findOne(id: number) {
-    return this.employees.find((e) => e.id === id);
+  findOne(id: string) {
+    const employee = this.employees.find((e) => e.id === id);
+    if (!employee) throw new NotFoundException();
+    return employee;
   }
 
-  update(id: number, updateEmployeeDto: UpdateEmployeeDto) {
+  update(id: string, updateEmployeeDto: UpdateEmployeeDto) {
+    const employee = this.findOne(id); // This validates existence and throws if not found
     const index = this.employees.findIndex((e) => e.id === id);
-    this.employees[index] = { ...this.employees[index], ...updateEmployeeDto };
-    return `Employee ${id} was updated`;
+    const updatedEmployee = { ...employee, ...updateEmployeeDto };
+    this.employees[index] = updatedEmployee;
+    return updatedEmployee;
   }
 
-  remove(id: number) {
-    this.employees = this.employees.filter((e) => e.id !== id);
-    return `Employee ${id} was removed.`;
+  remove(id: string) {
+    const index = this.employees.findIndex((e) => e.id === id);
+    if (index === -1) throw new NotFoundException();
+    const removedEmployee = this.employees[index];
+    this.employees.splice(index, 1);
+    return removedEmployee;
   }
 }

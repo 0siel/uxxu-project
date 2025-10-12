@@ -30,9 +30,9 @@ export class ProductsService {
     }
   ]
   create(createProductDto: CreateProductDto) {
-    createProductDto.productId = uuid()
-    this.products.push(createProductDto)
-    return createProductDto;
+    const product = { ...createProductDto, productId: uuid()}
+    this.products.push(product)
+    return product;
   }
 
   findAll() {

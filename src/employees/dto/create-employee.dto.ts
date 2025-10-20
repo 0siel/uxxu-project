@@ -21,4 +21,6 @@ export class CreateEmployeeDto {
   phoneNumber: string;
   @IsEmail()
   email: string;
+  @IsString()
+  photoUrl: string;
 }

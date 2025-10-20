@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Provider } from "src/providers/entities/provider.entity";
 
 @Entity()
 export class Product {
@@ -9,7 +10,9 @@ export class Product {
   @Column({ type: "float" })
   price: number;
   @Column({ type: "int" })
-  countSeal: number
-  @Column({ type: "uuid" })
-  provider
- }
+  countSeal: number;
+  @ManyToOne(() => Provider, (provider) => provider.products, {
+    eager: true,
+  })
+  provider: Provider;
+}

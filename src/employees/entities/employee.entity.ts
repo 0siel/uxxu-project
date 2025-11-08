@@ -1,3 +1,4 @@
+import { User } from "src/auth/entities/user.entity";
 import { Location } from "src/locations/entities/location.entity";
 import {
   Entity,
@@ -5,6 +6,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from "typeorm";
 
 @Entity()
@@ -12,22 +14,28 @@ export class Employee {
   @PrimaryGeneratedColumn("uuid")
   employeeId: string;
   @Column({ type: "text" })
-  name: string;
+  employeeName: string;
   @Column({ type: "text" })
-  lastName: string;
+  EmployeeLastName: string;
   @Column({ type: "text" })
-  phoneNumber: string;
-  @Column({ type: "text" })
-  email: string;
+  employeePhoneNumber: string;
+  @Column({ type: "text", unique: true })
+  employeeEmail: string;
   @Column({
     type: "text",
     nullable: true,
   })
-  photoUrl: string;
+  employeePhoto: string;
 
   @ManyToOne(() => Location, (location) => location.employees)
   @JoinColumn({
     name: "locationId",
   })
   location: Location;
+
+  @OneToOne(() => User)
+  @JoinColumn({
+    name: "userId",
+  })
+  user: User;
 }

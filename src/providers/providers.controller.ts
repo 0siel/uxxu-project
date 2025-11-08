@@ -18,6 +18,7 @@ import { User } from "src/auth/entities/user.entity";
 import { Roles } from "src/auth/decorators/roles.decorator";
 import { RolesGuard } from "src/auth/guards/roles.guard";
 import { Auth } from "src/auth/decorators/auth.decorator";
+import { ROLES } from "src/auth/constants/roles.constants";
 
 @Controller("providers")
 export class ProvidersController {
@@ -28,23 +29,23 @@ export class ProvidersController {
     return this.providersService.create(createProviderDto);
   }
 
-  @Auth("Employee")
+  @Auth(ROLES.EMPLOYEE, ROLES.MANAGER)
   @Get()
   findAll(@UserData() user: User) {
     console.log(user);
     return this.providersService.findAll();
   }
-
+  @Auth(ROLES.EMPLOYEE, ROLES.MANAGER)
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.providersService.findOne(id);
   }
-
+  @Auth(ROLES.EMPLOYEE, ROLES.MANAGER)
   @Get("name/:name")
   findByName(@Param("name") name: string) {
     return this.providersService.findByName(name);
   }
-
+  @Auth(ROLES.MANAGER)
   @Patch(":id")
   update(
     @Param("id") id: string,
@@ -53,6 +54,7 @@ export class ProvidersController {
     return this.providersService.update(id, updateProviderDto);
   }
 
+  @Auth(ROLES.MANAGER)
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.providersService.remove(id);

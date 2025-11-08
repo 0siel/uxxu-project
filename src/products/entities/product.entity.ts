@@ -14,9 +14,9 @@ export class Product {
   @Column({ type: "text" })
   productName: string;
   @Column({ type: "float" })
-  price: number;
+  productPrice: number;
   @Column({ type: "int" })
-  countSeal: number;
+  productCountSeal: number;
   @ManyToOne(() => Provider, (provider) => provider.products, {
     eager: true,
   })

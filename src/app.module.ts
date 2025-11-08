@@ -1,6 +1,4 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { EmployeesModule } from "./employees/employees.module";
 import { ProductsModule } from "./products/products.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -40,7 +38,5 @@ import { JWT_KEY } from "./auth/constants/jwt.constants";
     RegionsModule,
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

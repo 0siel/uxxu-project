@@ -21,7 +21,7 @@ export class LocationsService {
     return this.locationsRepository.find();
   }
 
-  findOne(id: string) {
+  findOne(id: number) {
     const location = this.locationsRepository.findOneBy({ locationId: id });
 
     if (!location) throw new NotFoundException(`Location not found`);
@@ -29,7 +29,7 @@ export class LocationsService {
     return location;
   }
 
-  async update(id: string, updateLocationDto: UpdateLocationDto) {
+  async update(id: number, updateLocationDto: UpdateLocationDto) {
     const locationToUpdate = await this.locationsRepository.preload({
       locationId: id,
       ...updateLocationDto,
@@ -38,7 +38,7 @@ export class LocationsService {
     return this.locationsRepository.save(locationToUpdate);
   }
 
-  remove(id: string) {
+  remove(id: number) {
     return this.locationsRepository.delete({ locationId: id });
   }
 }

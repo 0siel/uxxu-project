@@ -14,15 +14,15 @@ import {
 @Entity()
 export class Location {
   @PrimaryGeneratedColumn("increment")
-  locationId: string;
+  locationId: number;
   @Column("text")
   locationName: string;
   @Column("text")
-  locationAdress: string;
+  locationAddress: string;
   @Column("double precision", { array: true })
   locationLatLng: number[];
 
-  @OneToOne(() => Manager)
+  @OneToOne(() => Manager, { eager: true })
   @JoinColumn({
     name: "managerId",
   })

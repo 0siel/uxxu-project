@@ -16,7 +16,7 @@ export class Employee {
   @Column({ type: "text" })
   employeeName: string;
   @Column({ type: "text" })
-  EmployeeLastName: string;
+  employeeLastName: string;
   @Column({ type: "text" })
   employeePhoneNumber: string;
   @Column({ type: "text", unique: true })

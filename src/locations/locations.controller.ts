@@ -31,14 +31,14 @@ export class LocationsController {
 
   @Auth(ROLES.MANAGER)
   @Get(":id")
-  findOne(@Param("id") id: string) {
+  findOne(@Param("id") id: number) {
     return this.locationsService.findOne(id);
   }
 
   @Auth()
   @Patch(":id")
   update(
-    @Param("id") id: string,
+    @Param("id") id: number,
     @Body() updateLocationDto: UpdateLocationDto
   ) {
     return this.locationsService.update(id, updateLocationDto);
@@ -46,7 +46,7 @@ export class LocationsController {
 
   @Auth()
   @Delete(":id")
-  remove(@Param("id") id: string) {
+  remove(@Param("id") id: number) {
     return this.locationsService.remove(id);
   }
 }

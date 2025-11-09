@@ -12,12 +12,26 @@ import { CreateLocationDto } from "./dto/create-location.dto";
 import { UpdateLocationDto } from "./dto/update-location.dto";
 import { Auth } from "src/auth/decorators/auth.decorator";
 import { ROLES } from "src/auth/constants/roles.constants";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Location } from "./entities/location.entity";
 
+@ApiTags("locations")
 @Controller("locations")
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}
 
   @Auth()
+  @ApiResponse({
+    status: 201,
+    description: "Location created successfully.",
+    example: {
+      locationId: 1,
+      locationName: "UxxU HQ",
+      locationAddress:
+        "Blvd. Universitarios 3001, Juriquilla, Querétaro, Qro., México",
+      locationLatLng: [20.705780429282996, -100.44267442529818],
+    } as Location,
+  })
   @Post()
   create(@Body() createLocationDto: CreateLocationDto) {
     return this.locationsService.create(createLocationDto);

@@ -9,8 +9,9 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle("UxxU Project")
     .setDescription("The UxxU Project API description")
-    .setVersion("1.0")
+    .setVersion("0.9")
     .addTag("UxxU")
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, documentFactory);

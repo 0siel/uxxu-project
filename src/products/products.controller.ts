@@ -16,12 +16,25 @@ import { UserData } from "src/auth/decorators/user.decorator";
 import { User } from "src/auth/entities/user.entity";
 import { Auth } from "src/auth/decorators/auth.decorator";
 import { ROLES } from "src/auth/constants/roles.constants";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("products")
 @Controller("products")
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Auth(ROLES.EMPLOYEE, ROLES.MANAGER)
+  @ApiResponse({
+    status: 201,
+    description: "Product created successfully.",
+    example: {
+      productId: "a1b2c3d4-e5f6-7g89-0h1i-2j3k4l5m6n7o",
+      productName: "Coca cola 250ml",
+      price: 12.5,
+      countSeal: 3,
+      provider: {},
+    },
+  })
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);

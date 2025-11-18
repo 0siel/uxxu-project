@@ -5,6 +5,9 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  cors: {
+    origin: process.env.allowedOrigins;
+  }
 
   const config = new DocumentBuilder()
     .setTitle("UxxU Project")
@@ -23,6 +26,6 @@ async function bootstrap() {
       transform: true,
     })
   );
-  await app.listen(3000);
+  await app.listen(4000);
 }
 bootstrap();

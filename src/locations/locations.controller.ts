@@ -20,7 +20,7 @@ import { Location } from "./entities/location.entity";
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}
 
-  @Auth()
+  //@Auth()
   @ApiResponse({
     status: 201,
     description: "Location created successfully.",
@@ -37,7 +37,7 @@ export class LocationsController {
     return this.locationsService.create(createLocationDto);
   }
 
-  @Auth(ROLES.MANAGER)
+  //@Auth(ROLES.MANAGER)
   @Get()
   findAll() {
     return this.locationsService.findAll();

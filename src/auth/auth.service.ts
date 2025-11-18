@@ -26,15 +26,15 @@ export class AuthService {
     return this.userRepository.save(createUserDto);
   }
 
-  async loginUser(LoginUserDto: LoginUserDto) {
+  async loginUser(loginUserDto: LoginUserDto) {
     const user = await this.userRepository.findOne({
       where: {
-        userEmail: LoginUserDto.userEmail,
+        userEmail: loginUserDto.userEmail,
       },
     });
     if (!user) throw new UnauthorizedException("Invalid email or password");
     const match = await bcrypt.compare(
-      LoginUserDto.userPassword,
+      loginUserDto.userPassword,
       user.userPassword
     );
     if (!match) throw new UnauthorizedException("Invalid email or password");

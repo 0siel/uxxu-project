@@ -5,6 +5,7 @@ import {
   IsObject,
   IsOptional,
   IsString,
+  IsUUID,
   MaxLength,
 } from "class-validator";
 import { Manager } from "src/managers/entities/manager.entity";
@@ -32,7 +33,8 @@ export class CreateLocationDto {
   @IsObject()
   @IsOptional()
   region: Region;
-  @IsObject()
+
+  @IsUUID()
   @IsOptional()
-  manager: Manager;
+  manager: Manager | string;
 }

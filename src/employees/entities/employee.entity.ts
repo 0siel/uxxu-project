@@ -27,7 +27,11 @@ export class Employee {
   })
   employeePhoto: string;
 
-  @ManyToOne(() => Location, (location) => location.employees)
+  @ManyToOne(() => Location, (location) => location.employees, {
+    onDelete: "SET NULL",
+    nullable: true,
+    eager: true,
+  })
   @JoinColumn({
     name: "locationId",
   })

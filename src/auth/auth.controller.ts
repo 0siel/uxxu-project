@@ -27,7 +27,7 @@ export class AuthController {
     const token = await this.authService.loginUser(loginUserDto);
     response.cookie(TOKEN_NAME, token, {
       httpOnly: false,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      maxAge: 3600000,
     });
   }
 

@@ -4,12 +4,15 @@ import { UpdateLocationDto } from "./dto/update-location.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Location } from "./entities/location.entity";
 import { Repository } from "typeorm";
+import { Manager } from "src/managers/entities/manager.entity";
 
 @Injectable()
 export class LocationsService {
   constructor(
     @InjectRepository(Location)
-    private locationsRepository: Repository<Location>
+    private locationsRepository: Repository<Location>,
+    @InjectRepository(Manager)
+    private managersRepository: Repository<Manager>
   ) {}
 
   create(createLocationDto: CreateLocationDto) {
@@ -21,8 +24,10 @@ export class LocationsService {
     return this.locationsRepository.find();
   }
 
-  findOne(id: number) {
-    const location = this.locationsRepository.findOneBy({ locationId: id });
+  async findOne(id: number) {
+    const location = await this.locationsRepository.findOneBy({
+      locationId: id,
+    });
 
     if (!location) throw new NotFoundException(`Location not found`);
 
@@ -30,12 +35,40 @@ export class LocationsService {
   }
 
   async update(id: number, updateLocationDto: UpdateLocationDto) {
-    const locationToUpdate = await this.locationsRepository.preload({
+    await this.managersRepository
+      .createQueryBuilder("manager")
+      .update(Manager)
+      .set({ location: () => "NULL" })
+      .where("location = :locationId", { locationId: id })
+      .execute();
+
+    const location = await this.locationsRepository.preload({
       locationId: id,
       ...updateLocationDto,
     });
-    if (!locationToUpdate) throw new NotFoundException(`Location not found`);
-    return this.locationsRepository.save(locationToUpdate);
+
+    if (!location) throw new NotFoundException(`Location not found`);
+
+    const savedLocation = await this.locationsRepository.save(location);
+
+    // If a manager id or manager object was provided, attempt to preload and save the manager relation
+    if (updateLocationDto.manager) {
+      const managerIdValue =
+        typeof updateLocationDto.manager === "string"
+          ? updateLocationDto.manager
+          : (updateLocationDto.manager as Manager).managerId;
+
+      const updatedManager = await this.managersRepository.preload({
+        managerId: managerIdValue,
+        location: savedLocation,
+      });
+
+      if (updatedManager) {
+        await this.managersRepository.save(updatedManager);
+      }
+    }
+
+    return savedLocation;
   }
 
   remove(id: number) {

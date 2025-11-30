@@ -60,6 +60,6 @@ export class ProvidersService {
     if (result.affected === 0)
       throw new NotFoundException(`Provider with ID ${id} not found`);
 
-    return `Provider deleted`;
+    return result;
   }
 }
